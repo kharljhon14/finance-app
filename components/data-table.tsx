@@ -30,7 +30,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filterKey: string;
-  onDelete: (rows: Row<TData[]>) => void;
+  onDelete: (rows: Row<TData>[]) => void;
   disabled?: boolean;
 }
 
@@ -75,6 +75,10 @@ export function DataTable<TData, TValue>({
           <Button
             variant="destructive"
             className="ml-auto text-xs font-normal"
+            onClick={() => {
+              onDelete(table.getFilteredSelectedRowModel().rows);
+              table.resetRowSelection();
+            }}
             disabled={disabled}
           >
             <Trash className="size-4 mr-2" />

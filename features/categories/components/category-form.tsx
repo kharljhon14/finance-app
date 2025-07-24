@@ -1,5 +1,5 @@
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import { insertAccountSchema } from '@/db/schema';
+import { insertCategoriesSchema } from '@/db/schema';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod/v4';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,27 +7,27 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Trash } from 'lucide-react';
 
-const newAccountFormSchema = insertAccountSchema.pick({
+const newCategoryFormSchema = insertCategoriesSchema.pick({
   name: true
 });
 
-export type NewAccountFormValues = z.input<typeof newAccountFormSchema>;
+export type NewCategoryFormValues = z.input<typeof newCategoryFormSchema>;
 
 interface Props {
   id?: string;
-  defaultValues?: NewAccountFormValues;
-  onSubmit: (values: NewAccountFormValues) => void;
+  defaultValues?: NewCategoryFormValues;
+  onSubmit: (values: NewCategoryFormValues) => void;
   onDelete?: () => void;
   disabled?: boolean;
 }
 
-export default function AccountForm({ id, defaultValues, onSubmit, onDelete, disabled }: Props) {
-  const form = useForm<NewAccountFormValues>({
-    resolver: zodResolver(newAccountFormSchema),
+export default function CategoryForm({ id, defaultValues, onSubmit, onDelete, disabled }: Props) {
+  const form = useForm<NewCategoryFormValues>({
+    resolver: zodResolver(newCategoryFormSchema),
     defaultValues
   });
 
-  const handleOnSubmit: SubmitHandler<NewAccountFormValues> = (values) => {
+  const handleOnSubmit: SubmitHandler<NewCategoryFormValues> = (values) => {
     onSubmit(values);
   };
 
@@ -62,7 +62,7 @@ export default function AccountForm({ id, defaultValues, onSubmit, onDelete, dis
           className="w-full"
           disabled={disabled}
         >
-          {id ? 'Save Changes' : 'Create Account'}
+          {id ? 'Save Changes' : 'Create Category'}
         </Button>
         {!!id && (
           <Button
@@ -72,7 +72,7 @@ export default function AccountForm({ id, defaultValues, onSubmit, onDelete, dis
             onClick={handleOnDelete}
             variant="outline"
           >
-            <Trash /> <p>Delete Account</p>
+            <Trash /> <p>Delete Category</p>
           </Button>
         )}
       </form>

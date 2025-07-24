@@ -15,6 +15,13 @@
       "when": 1752633594175,
       "tag": "0001_clean_wendigo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1753381061347,
+      "tag": "0002_flowery_gauntlet",
+      "breakpoints": true
     }
   ]
 }

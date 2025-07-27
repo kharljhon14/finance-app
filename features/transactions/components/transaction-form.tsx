@@ -1,5 +1,5 @@
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import { insertAccountSchema } from '@/db/schema';
+import { insertTransactionsSchema } from '@/db/schema';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod/v4';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,27 +7,50 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Trash } from 'lucide-react';
 
-const newAccountFormSchema = insertAccountSchema.pick({
-  name: true
+const newTransactionFormSchema = z.object({
+  date: z.coerce.date(),
+  accountId: z.string(),
+  categoryId: z.string().nullable().optional(),
+  payee: z.string(),
+  amount: z.string(),
+  notes: z.string().nullable().optional()
 });
 
-export type NewAccountFormValues = z.input<typeof newAccountFormSchema>;
+const apiSchema = insertTransactionsSchema.omit({
+  id: true
+});
 
+export type NewTransactionFormValues = z.input<typeof newTransactionFormSchema>;
+export type ApiTransactionFormValues = z.input<typeof apiSchema>;
 interface Props {
   id?: string;
-  defaultValues?: NewAccountFormValues;
-  onSubmit: (values: NewAccountFormValues) => void;
+  defaultValues?: NewTransactionFormValues;
+  onSubmit: (values: ApiTransactionFormValues) => void;
   onDelete?: () => void;
   disabled?: boolean;
+  accountOptions: { label: string; value: string }[];
+  categoryOptions: { label: string; value: string }[];
+  onCreateAccount: (name: string) => void;
+  onCreateCategory: (name: string) => void;
 }
 
-export default function AccountForm({ id, defaultValues, onSubmit, onDelete, disabled }: Props) {
-  const form = useForm<NewAccountFormValues>({
-    resolver: zodResolver(newAccountFormSchema),
+export default function TransactionForm({
+  id,
+  defaultValues,
+  onSubmit,
+  onDelete,
+  accountOptions,
+  categoryOptions,
+  onCreateAccount,
+  onCreateCategory,
+  disabled
+}: Props) {
+  const form = useForm<NewTransactionFormValues>({
+    resolver: zodResolver(newTransactionFormSchema),
     defaultValues
   });
 
-  const handleOnSubmit: SubmitHandler<NewAccountFormValues> = (values) => {
+  const handleOnSubmit: SubmitHandler<NewTransactionFormValues> = (values) => {
     onSubmit(values);
   };
 
@@ -72,7 +95,7 @@ export default function AccountForm({ id, defaultValues, onSubmit, onDelete, dis
             onClick={handleOnDelete}
             variant="outline"
           >
-            <Trash /> <p>Delete Account</p>
+            <Trash /> <p>Delete Transaction</p>
           </Button>
         )}
       </form>

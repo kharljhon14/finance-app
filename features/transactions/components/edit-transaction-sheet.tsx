@@ -6,7 +6,7 @@ import {
   SheetTitle
 } from '@/components/ui/sheet';
 
-import AccountForm, { NewAccountFormValues } from './account-form';
+import TransactionForm, { NewTransactionFormValues } from './transaction-form';
 
 import { useOpenAccount } from '../hooks/use-open-transaction';
 import { useGetAccount } from '../hooks/api/use-get-account';
@@ -15,7 +15,7 @@ import { useUpdateAccount } from '../hooks/api/use-update-account';
 import { useDeleteAccount } from '../hooks/api/use-delete-account';
 import { useConfirm } from '@/hooks/use-confirm';
 
-export default function EditAccountSheet() {
+export default function EditTransactoinSheet() {
   const { id, isOpen, onClose } = useOpenAccount();
 
   const [ConfirmDialog, confirm] = useConfirm(
@@ -30,7 +30,7 @@ export default function EditAccountSheet() {
   const isLoading = accountQuery.isLoading;
   const isPending = updateMutation.isPending || deleteMutation.isPending;
 
-  const onSubmit = (values: NewAccountFormValues) => {
+  const onSubmit = (values: NewTransactionFormValues) => {
     updateMutation.mutate(values, {
       onSuccess: () => {
         onClose();
@@ -75,7 +75,7 @@ export default function EditAccountSheet() {
               <Loader2 className="animate-spin size-4 text-muted-foreground" />
             </div>
           ) : (
-            <AccountForm
+            <TransactionForm
               id={id}
               onSubmit={onSubmit}
               disabled={isPending}

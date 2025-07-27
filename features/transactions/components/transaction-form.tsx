@@ -7,9 +7,11 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Trash } from 'lucide-react';
 import Select from '@/components/select';
+import DatePicker from '@/components/date-picker';
+import { Textarea } from '@/components/ui/textarea';
 
 const newTransactionFormSchema = z.object({
-  date: z.coerce.date(),
+  date: z.coerce.date<Date>(),
   accountId: z.string(),
   categoryId: z.string().nullable().optional(),
   payee: z.string(),
@@ -17,6 +19,7 @@ const newTransactionFormSchema = z.object({
   notes: z.string().nullable().optional()
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const apiSchema = insertTransactionsSchema.omit({
   id: true
 });
@@ -66,6 +69,22 @@ export default function TransactionForm({
         onSubmit={form.handleSubmit(handleOnSubmit)}
       >
         <FormField
+          name="date"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <DatePicker
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={disabled}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
           name="accountId"
           control={form.control}
           render={({ field }) => (
@@ -99,6 +118,41 @@ export default function TransactionForm({
                   value={field.value}
                   onChange={field.onChange}
                   disabled={disabled}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="payee"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Payee</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  disabled={disabled}
+                  placeholder="Add a payee"
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="notes"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Notes</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  value={field.value ?? ''}
+                  disabled={disabled}
+                  placeholder="Optional notes"
                 />
               </FormControl>
             </FormItem>

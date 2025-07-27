@@ -12,6 +12,8 @@ import { useCreateTransaction } from '../hooks/api/use-create-transaction';
 import { useCreateCategory } from '@/features/categories/hooks/api/use-create-category';
 import { useGetCategories } from '@/features/categories/hooks/api/use-get-categories';
 import { Loader2 } from 'lucide-react';
+import { useGetAccounts } from '@/features/accounts/hooks/api/use-get-accounts';
+import { useCreateAccount } from '@/features/accounts/hooks/api/use-create-account';
 
 export default function NewTransactionSheet() {
   const { isOpen, onClose } = useNewTransaction();
@@ -25,8 +27,8 @@ export default function NewTransactionSheet() {
   }));
 
   // ACCOUNTS
-  const accountMutation = useCreateCategory();
-  const accountsQuery = useGetCategories();
+  const accountMutation = useCreateAccount();
+  const accountsQuery = useGetAccounts();
   const onCreateAccount = (name: string) => accountMutation.mutate({ name });
   const accountOptions = (accountsQuery.data ?? []).map((account) => ({
     label: account.name,

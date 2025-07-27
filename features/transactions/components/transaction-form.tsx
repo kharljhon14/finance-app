@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Trash } from 'lucide-react';
+import Select from '@/components/select';
 
 const newTransactionFormSchema = z.object({
   date: z.coerce.date(),
@@ -51,7 +52,7 @@ export default function TransactionForm({
   });
 
   const handleOnSubmit: SubmitHandler<NewTransactionFormValues> = (values) => {
-    onSubmit(values);
+    console.log(values);
   };
 
   const handleOnDelete = () => {
@@ -65,16 +66,39 @@ export default function TransactionForm({
         onSubmit={form.handleSubmit(handleOnSubmit)}
       >
         <FormField
-          name="name"
+          name="accountId"
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Account</FormLabel>
               <FormControl>
-                <Input
+                <Select
+                  placeholder="Select an account"
+                  options={accountOptions}
+                  onCreate={onCreateAccount}
+                  value={field.value}
+                  onChange={field.onChange}
                   disabled={disabled}
-                  placeholder="e.g. Cash, Bank, Credit Card"
-                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="categoryId"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <FormControl>
+                <Select
+                  placeholder="Select a category"
+                  options={categoryOptions}
+                  onCreate={onCreateCategory}
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={disabled}
                 />
               </FormControl>
             </FormItem>
@@ -85,7 +109,7 @@ export default function TransactionForm({
           className="w-full"
           disabled={disabled}
         >
-          {id ? 'Save Changes' : 'Create Account'}
+          {id ? 'Save Changes' : 'Create Transaction'}
         </Button>
         {!!id && (
           <Button

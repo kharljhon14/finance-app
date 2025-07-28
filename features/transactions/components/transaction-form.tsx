@@ -9,6 +9,8 @@ import { Trash } from 'lucide-react';
 import Select from '@/components/select';
 import DatePicker from '@/components/date-picker';
 import { Textarea } from '@/components/ui/textarea';
+import AmountInput from '@/components/amount-input';
+import { convertAmountToMiliunits } from '@/lib/utils';
 
 const newTransactionFormSchema = z.object({
   date: z.coerce.date<Date>(),
@@ -55,7 +57,9 @@ export default function TransactionForm({
   });
 
   const handleOnSubmit: SubmitHandler<NewTransactionFormValues> = (values) => {
-    console.log(values);
+    const parasedAmount = parseFloat(values.amount);
+    const amountInMiliunits = convertAmountToMiliunits(parasedAmount);
+    onSubmit({ ...values, amount: amountInMiliunits });
   };
 
   const handleOnDelete = () => {
@@ -135,6 +139,23 @@ export default function TransactionForm({
                   {...field}
                   disabled={disabled}
                   placeholder="Add a payee"
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="amount"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Amount</FormLabel>
+              <FormControl>
+                <AmountInput
+                  disabled={disabled}
+                  placeholder="0.00"
+                  {...field}
                 />
               </FormControl>
             </FormItem>

@@ -136,9 +136,10 @@ export default function TransactionForm({
               <FormLabel>Payee</FormLabel>
               <FormControl>
                 <Input
-                  {...field}
                   disabled={disabled}
                   placeholder="Add a payee"
+                  value={field.value}
+                  onChange={field.onChange}
                 />
               </FormControl>
             </FormItem>

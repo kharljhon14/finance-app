@@ -6,20 +6,22 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, Plus } from 'lucide-react';
 import { columns } from './columns';
 import { DataTable } from '@/components/data-table';
-import { useGetAccounts } from '@/features/accounts/hooks/api/use-get-accounts';
+
 import { Skeleton } from '@/components/ui/skeleton';
-import { useBulkDeleteAccounts } from '@/features/accounts/hooks/api/use-bulk-delete';
+
 import { useNewTransaction } from '@/features/transactions/hooks/use-new-transaction';
+import { useGetTransactions } from '@/features/transactions/hooks/api/use-get-transactions';
+import { useBulkDeleteTransactions } from '@/features/transactions/hooks/api/use-bulk-delete';
 
 export default function TransactionsPage() {
-  const newTransactoin = useNewTransaction();
-  const accountsQuery = useGetAccounts();
-  const deleteAccounts = useBulkDeleteAccounts();
-  const accounts = accountsQuery.data || [];
+  const newTransaction = useNewTransaction();
+  const transactionsQuery = useGetTransactions();
+  const deleteTransactions = useBulkDeleteTransactions();
+  const transactions = transactionsQuery.data || [];
 
-  const isDisabled = accountsQuery.isLoading || deleteAccounts.isPending;
+  const isDisabled = transactionsQuery.isLoading || deleteTransactions.isPending;
 
-  if (accountsQuery.isLoading) {
+  if (transactionsQuery.isLoading) {
     return (
       <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
         <Card className="border-none drop-shadow-sm">
@@ -42,7 +44,7 @@ export default function TransactionsPage() {
         <CardHeader className="gap-y-2 flex flex-col lg:flex-row lg:items-center lg:justify-between">
           <CardTitle className="text-xl line-clamp-1">Transactions History</CardTitle>
           <Button
-            onClick={newTransactoin.onOpen}
+            onClick={newTransaction.onOpen}
             className="w-full lg:w-auto"
           >
             <Plus /> Add New
@@ -52,11 +54,11 @@ export default function TransactionsPage() {
           <DataTable
             onDelete={(row) => {
               const ids = row.map((r) => r.original.id);
-              deleteAccounts.mutate({ ids });
+              deleteTransactions.mutate({ ids });
             }}
-            filterKey="name"
+            filterKey="payee"
             columns={columns}
-            data={accounts}
+            data={transactions}
             disabled={isDisabled}
           />
         </CardContent>

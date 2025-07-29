@@ -55,5 +55,5 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
 export const insertAccountSchema = createInsertSchema(accounts);
 export const insertCategoriesSchema = createInsertSchema(categories);
 export const insertTransactionsSchema = createInsertSchema(transactions, {
-  date: z.coerce.date()
+  date: z.coerce.date<Date>()
 });

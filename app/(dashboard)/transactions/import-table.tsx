@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
+import TableHeadSelect from './table-head-select';
 
 interface Props {
   headers: string[];
@@ -26,7 +27,13 @@ export default function ImportTable({
         <TableHeader className="bg-muted">
           <TableRow>
             {headers.map((_item, index) => (
-              <TableHead key={index}>{index}</TableHead>
+              <TableHead key={index}>
+                <TableHeadSelect
+                  selectedColumns={selectedColumns}
+                  onChange={onTableHeadSelectChange}
+                  columnIndex={index}
+                />
+              </TableHead>
             ))}
           </TableRow>
         </TableHeader>

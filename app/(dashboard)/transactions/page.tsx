@@ -13,8 +13,14 @@ import { useNewTransaction } from '@/features/transactions/hooks/use-new-transac
 import { useGetTransactions } from '@/features/transactions/hooks/api/use-get-transactions';
 import { useBulkDeleteTransactions } from '@/features/transactions/hooks/api/use-bulk-delete';
 import { useState } from 'react';
+
+import { transactions as transactionsSchema } from '@/db/schema';
+
 import UploadButton from './upload-button';
 import ImportCard from './import-card';
+import { useSelectAccount } from '@/features/accounts/hooks/use-select-account';
+import { toast } from 'sonner';
+import { useBulkCreateTransactions } from '@/features/transactions/hooks/api/use-bulk-create';
 
 enum VARIANTS {
   LIST = 'LIST',
@@ -28,11 +34,13 @@ const INITIAL_IMPORT_RESULTS = {
 };
 
 export default function TransactionsPage() {
+  const [AccountDialog, confirm] = useSelectAccount();
   const [variant, setVariant] = useState(VARIANTS.LIST);
   const [importResults, setImportResults] = useState(INITIAL_IMPORT_RESULTS);
 
   const newTransaction = useNewTransaction();
   const transactionsQuery = useGetTransactions();
+  const createMutation = useBulkCreateTransactions();
   const deleteTransactions = useBulkDeleteTransactions();
   const transactions = transactionsQuery.data || [];
 
@@ -46,6 +54,25 @@ export default function TransactionsPage() {
   const onCancelImport = () => {
     setImportResults(INITIAL_IMPORT_RESULTS);
     setVariant(VARIANTS.LIST);
+  };
+
+  const onSubmitImport = async (values: (typeof transactionsSchema.$inferInsert)[]) => {
+    const accountId = await confirm();
+
+    if (!accountId) {
+      return toast.error('Please select an account to continue.');
+    }
+
+    const data = values.map((value) => ({
+      ...value,
+      accountId: accountId as string
+    }));
+
+    createMutation.mutate(data, {
+      onSuccess: () => {
+        onCancelImport();
+      }
+    });
   };
 
   if (transactionsQuery.isLoading) {
@@ -68,13 +95,12 @@ export default function TransactionsPage() {
   if (variant === VARIANTS.IMPORT) {
     return (
       <>
-        <div>
-          <ImportCard
-            data={importResults.data}
-            onCancel={onCancelImport}
-            onSubmit={() => {}}
-          />
-        </div>
+        <AccountDialog />
+        <ImportCard
+          data={importResults.data}
+          onCancel={onCancelImport}
+          onSubmit={onSubmitImport}
+        />
       </>
     );
   }
@@ -87,6 +113,7 @@ export default function TransactionsPage() {
           <div className="flex flex-col lg:flex-row w-full lg:w-auto items-center gap-2">
             <Button
               onClick={newTransaction.onOpen}
+              size="sm"
               className="w-full lg:w-auto"
             >
               <Plus /> Add New

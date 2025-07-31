@@ -75,7 +75,7 @@ export function DataTable<TData, TValue>({
         <Input
           placeholder={`Filter ${filterKey}...`}
           value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ''}
-          onChange={(event) => table.getColumn('email')?.setFilterValue(event.target.value)}
+          onChange={(event) => table.getColumn(filterKey)?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
         {table.getFilteredSelectedRowModel().rows.length > 0 && (

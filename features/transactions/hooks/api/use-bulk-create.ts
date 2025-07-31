@@ -18,7 +18,7 @@ export function useBulkCreateTransactions() {
       return await response.json();
     },
     onSuccess() {
-      toast.success('transactions created');
+      toast.success('Transactions created');
       queryClient.invalidateQueries({ queryKey: ['transactions'] });
     },
     onError() {

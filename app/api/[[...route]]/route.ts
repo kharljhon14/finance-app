@@ -1,11 +1,10 @@
-import { clerkMiddleware, getAuth } from '@hono/clerk-auth';
-
 import { Hono } from 'hono';
 import { handle } from 'hono/vercel';
 
 import accounts from './accounts';
 import categories from './categories';
 import transactions from './transactions';
+import summary from './summary';
 import { HTTPException } from 'hono/http-exception';
 
 export const runtime = 'edge';
@@ -20,24 +19,12 @@ app.onError((err, c) => {
   return c.json({ error: 'internal error' }, 500);
 });
 
-app.get('/hello', clerkMiddleware(), (c) => {
-  const auth = getAuth(c);
-
-  if (!auth?.userId) {
-    return c.json({ error: 'Unauthorized' });
-  }
-
-  return c.json({
-    message: 'Hello Next.js!',
-    userId: auth.userId
-  });
-});
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const routes = app
   .route('/accounts', accounts)
   .route('/categories', categories)
-  .route('/transactions', transactions);
+  .route('/transactions', transactions)
+  .route('/summary', summary);
 
 export const GET = handle(app);
 export const POST = handle(app);

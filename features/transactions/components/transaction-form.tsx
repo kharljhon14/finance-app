@@ -69,6 +69,7 @@ export default function TransactionForm({
   return (
     <Form {...form}>
       <form
+        autoComplete="off"
         className="space-y-4 pt-4 mx-4"
         onSubmit={form.handleSubmit(handleOnSubmit)}
       >
@@ -82,6 +83,24 @@ export default function TransactionForm({
                   value={field.value}
                   onChange={field.onChange}
                   disabled={disabled}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="payee"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Payee</FormLabel>
+              <FormControl>
+                <Input
+                  disabled={disabled}
+                  placeholder="Add a payee"
+                  value={field.value}
+                  onChange={field.onChange}
                 />
               </FormControl>
             </FormItem>
@@ -122,24 +141,6 @@ export default function TransactionForm({
                   value={field.value}
                   onChange={field.onChange}
                   disabled={disabled}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          name="payee"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Payee</FormLabel>
-              <FormControl>
-                <Input
-                  disabled={disabled}
-                  placeholder="Add a payee"
-                  value={field.value}
-                  onChange={field.onChange}
                 />
               </FormControl>
             </FormItem>

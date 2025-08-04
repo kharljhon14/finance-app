@@ -8,7 +8,7 @@ interface Props {
   categoryId: string | null;
 }
 
-export default function CategoryColumnn({ id, category, categoryId }: Props) {
+export default function CategoryColumnn({ category, categoryId }: Props) {
   const { onOpen } = useOpenCategory();
 
   const onClick = () => {

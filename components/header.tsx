@@ -4,6 +4,7 @@ import Navigation from './navigation';
 import { Loader2 } from 'lucide-react';
 import WelcomeMessage from './welcome-message';
 import Filters from './filters';
+import { Suspense } from 'react';
 
 export default function Header() {
   return (
@@ -22,7 +23,9 @@ export default function Header() {
           </ClerkLoading>
         </div>
         <WelcomeMessage />
-        <Filters />
+        <Suspense>
+          <Filters />
+        </Suspense>
       </div>
     </header>
   );

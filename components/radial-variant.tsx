@@ -20,7 +20,7 @@ export default function RadialVariant({ data }: Props) {
     >
       <RadialBarChart
         cx="50%"
-        cy="30%"
+        cy="45%"
         barSize={10}
         innerRadius="90%"
         outerRadius="40%"
